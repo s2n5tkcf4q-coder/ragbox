@@ -1,0 +1,78 @@
+<!-- templates/admin_users.html -->
+{% extends "admin_base.html" %}
+{% block title %}用户管理 - 管理后台{% endblock %}
+{% block extra_css %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_users.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="users-container">
+    <h2 class="page-title">👥 用户管理</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="table-wrapper">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>角色</th>
+                    <th>注册时间</th>
+                    <th>最后活跃</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <span class="badge badge-{{ user.role }}">{{ user.role }}</span>
+                    </td>
+                    <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else '-' }}</td>
+                    <td>{{ user.last_active_at.strftime('%Y-%m-%d %H:%M') if user.last_active_at else '-' }}</td>
+                    <td class="action-cell">
+                        <!-- 角色切换表单 -->
+                        <form method="POST" action="{{ url_for('admin.change_role', user_id=user.id) }}" class="inline-form">
+                            <select name="role" class="role-select" onchange="this.form.submit()">
+                                <option value="user" {% if user.role == 'user' %}selected{% endif %}>普通用户</option>
+                                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>管理员</option>
+                            </select>
+                        </form>
+
+                        <!-- 删除按钮（不能删除自己） -->
+                        {% if user.id != current_user.id %}
+                        <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" class="inline-form" onsubmit="return confirm('确定要删除用户 {{ user.username }} 吗？此操作不可恢复。');">
+                            <button type="submit" class="btn btn-danger btn-sm">删除</button>
+                        </form>
+                        {% else %}
+                        <span class="text-muted">当前用户</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="no-data">暂无用户数据</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/admin_users.js') }}"></script>
+{% endblock %}

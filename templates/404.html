@@ -1,0 +1,23 @@
+<!-- templates/404.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 - RAG 知识库问答系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+</head>
+<body class="light-mode">
+    <div class="error-container">
+        <div class="error-card">
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title">页面未找到</h2>
+            <p class="error-message">您访问的页面不存在或已被移除。</p>
+            <div class="error-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">返回首页</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+</body>
+</html>

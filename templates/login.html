@@ -1,0 +1,100 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - RAG 知识库问答系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body class="light-mode">
+    <div class="login-wrapper">
+        <div class="login-card">
+            <!-- 系统标题 -->
+            <div class="login-header">
+                <h1 class="login-title">RAG 知识库问答系统</h1>
+                <p class="login-subtitle">欢迎回来，请登录您的账号</p>
+            </div>
+
+            <!-- 登录表单 -->
+            <form method="POST" action="{{ url_for('auth.login') }}" class="login-form" autocomplete="off">
+                <!-- 用户名 -->
+                <div class="form-group">
+                    <label for="username" class="form-label">用户名</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-input"
+                        placeholder="请输入用户名"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <!-- 密码 -->
+                <div class="form-group">
+                    <label for="password" class="form-label">密码</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-input"
+                        placeholder="请输入密码"
+                        required
+                    >
+                </div>
+
+                <!-- 验证码 -->
+                <div class="form-group">
+                    <label for="captcha" class="form-label">验证码</label>
+                    <div class="captcha-row">
+                        <input
+                            type="text"
+                            id="captcha"
+                            name="captcha"
+                            class="form-input captcha-input"
+                            placeholder="请输入验证码"
+                            maxlength="4"
+                            required
+                        >
+                        <img
+                            src="{{ url_for('auth.captcha') }}"
+                            alt="验证码"
+                            class="captcha-img"
+                            id="captcha-img"
+                            title="点击刷新验证码"
+                        >
+                    </div>
+                </div>
+
+                <!-- 错误提示区（由 Flask flash 消息渲染） -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alert-container">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <!-- 登录按钮 -->
+                <button type="submit" class="btn btn-primary btn-login">
+                    登 录
+                </button>
+
+                <!-- 注册链接 -->
+                <div class="login-footer">
+                    还没有账号？
+                    <a href="{{ url_for('auth.register') }}" class="link-register">立即注册</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

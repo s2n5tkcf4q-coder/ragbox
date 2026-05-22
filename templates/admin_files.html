@@ -1,0 +1,93 @@
+<!-- templates/admin_files.html -->
+{% extends "admin_base.html" %}
+{% block title %}文件列表 - 管理后台{% endblock %}
+{% block extra_css %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_files.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="files-container">
+    <h2 class="page-title">📁 文件列表</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="table-wrapper">
+        <table class="files-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>文件名</th>
+                    <th>大小(KB)</th>
+                    <th>上传时间</th>
+                    <th>块数</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documents %}
+                <tr class="file-row" data-doc-id="{{ doc.id }}">
+                    <td>{{ doc.id }}</td>
+                    <td>{{ doc.original_filename }}</td>
+                    <td>
+                        {% if doc.file_size is defined and doc.file_size %}
+                            {{ (doc.file_size / 1024) | round(2) }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ doc.upload_time.strftime('%Y-%m-%d %H:%M') if doc.upload_time else '-' }}</td>
+                    <td>{{ doc.chunk_count }}</td>
+                    <td>
+                        {% if doc.status == 'completed' %}
+                            <span class="badge badge-success">已完成</span>
+                        {% elif doc.status == 'processing' %}
+                            <span class="badge badge-warning">处理中</span>
+                        {% elif doc.status == 'failed' %}
+                            <span class="badge badge-danger">失败</span>
+                        {% else %}
+                            <span class="badge badge-secondary">{{ doc.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="action-cell">
+                        <button type="button" class="btn btn-sm btn-info view-chunks-btn">查看分块</button>
+                        <form method="POST" action="{{ url_for('admin.delete_document', doc_id=doc.id) }}" class="inline-form" onsubmit="return confirm('确定要删除该文档吗？此操作不可恢复。');">
+                            <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="no-data">暂无已处理的文件</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 分块展示面板 -->
+    <div id="chunks-panel" class="chunks-panel" style="display: none;">
+        <div class="chunks-header">
+            <h3>📄 分块详情 - <span id="chunks-doc-name"></span></h3>
+            <button type="button" class="btn btn-sm btn-close-panel" id="close-chunks">✖ 关闭</button>
+        </div>
+        <div class="chunks-list" id="chunks-content">
+            <!-- 动态加载 -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/admin_files.js') }}"></script>
+{% endblock %}

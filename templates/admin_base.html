@@ -1,0 +1,59 @@
+<!-- templates/admin_base.html -->
+{% extends "base.html" %}
+{% block title %}管理后台 - RAG 知识库问答系统{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <!-- 左侧边栏导航 -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="{{ url_for('admin.settings') }}" class="sidebar-link {% if request.endpoint == 'admin.settings' %}active{% endif %}">
+                        <span class="sidebar-icon">⚙️</span>
+                        <span class="sidebar-text">系统设置</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.users') }}" class="sidebar-link {% if request.endpoint == 'admin.users' %}active{% endif %}">
+                        <span class="sidebar-icon">👥</span>
+                        <span class="sidebar-text">用户管理</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.upload') }}" class="sidebar-link {% if request.endpoint == 'admin.upload' %}active{% endif %}">
+                        <span class="sidebar-icon">📤</span>
+                        <span class="sidebar-text">处理文件</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.files') }}" class="sidebar-link {% if request.endpoint == 'admin.files' %}active{% endif %}">
+                        <span class="sidebar-icon">📁</span>
+                        <span class="sidebar-text">文件列表</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('user.chat') }}" class="sidebar-link">
+                        <span class="sidebar-icon">💬</span>
+                        <span class="sidebar-text">问答系统</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- 移动端侧边栏切换按钮（可在 js 中控制） -->
+        <button class="sidebar-toggle" id="sidebar-toggle" title="折叠侧边栏">☰</button>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <section class="admin-content">
+        {% block admin_content %}{% endblock %}
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

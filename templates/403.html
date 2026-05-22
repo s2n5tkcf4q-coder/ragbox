@@ -1,0 +1,23 @@
+<!-- templates/403.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权限不足 - RAG 知识库问答系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+</head>
+<body class="light-mode">
+    <div class="error-container">
+        <div class="error-card">
+            <h1 class="error-code">403</h1>
+            <h2 class="error-title">权限不足</h2>
+            <p class="error-message">抱歉，您没有访问该页面的权限。</p>
+            <div class="error-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">返回首页</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+</body>
+</html>

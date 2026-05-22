@@ -1,0 +1,144 @@
+<!-- templates/admin_settings.html -->
+{% extends "admin_base.html" %}
+{% block title %}系统设置 - 管理后台{% endblock %}
+{% block extra_css %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_settings.css') }}">
+{% endblock %}
+
+{% block admin_content %}
+<div class="settings-container">
+    <h2 class="page-title">⚙️ 系统设置</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin.settings') }}" class="settings-form">
+        <!-- LLM 模式选择 -->
+        <fieldset class="form-section">
+            <legend>大模型配置</legend>
+
+            <!-- 模式选择 -->
+            <div class="form-row">
+                <label for="llm_mode">连接模式</label>
+                <select id="llm_mode" name="llm_mode" class="form-select">
+                    <option value="api" {% if config.llm_mode == 'api' %}selected{% endif %}>API (OpenAI 兼容)</option>
+                    <option value="ollama" {% if config.llm_mode == 'ollama' %}selected{% endif %}>Ollama 本地</option>
+                </select>
+            </div>
+
+            <!-- API 配置（动态显示） -->
+            <div id="api-config" class="sub-config" style="display: none;">
+                <div class="form-row">
+                    <label for="api_base_url">API Base URL</label>
+                    <input type="url" id="api_base_url" name="api_base_url" class="form-input" value="{{ config.api_base_url or '' }}" placeholder="https://api.openai.com/v1">
+                </div>
+                <div class="form-row">
+                    <label for="api_key">API Key</label>
+                    <input type="password" id="api_key" name="api_key" class="form-input" value="{{ config.api_key or '' }}" placeholder="sk-...">
+                </div>
+                <div class="form-row">
+                    <label for="api_chat_model">对话模型名称</label>
+                    <input type="text" id="api_chat_model" name="api_chat_model" class="form-input" value="{{ config.api_chat_model or '' }}" placeholder="gpt-3.5-turbo">
+                </div>
+                <div class="form-row">
+                    <label for="api_embedding_model">嵌入模型名称</label>
+                    <input type="text" id="api_embedding_model" name="api_embedding_model" class="form-input" value="{{ config.api_embedding_model or '' }}" placeholder="text-embedding-ada-002">
+                </div>
+            </div>
+
+            <!-- Ollama 配置（动态显示） -->
+            <div id="ollama-config" class="sub-config" style="display: none;">
+                <div class="form-row">
+                    <label for="ollama_base_url">Ollama Base URL</label>
+                    <input type="url" id="ollama_base_url" name="ollama_base_url" class="form-input" value="{{ config.ollama_base_url or 'http://localhost:11434' }}">
+                </div>
+                <div class="form-row">
+                    <label for="local_chat_model">对话模型名称</label>
+                    <input type="text" id="local_chat_model" name="local_chat_model" class="form-input" value="{{ config.local_chat_model or '' }}" placeholder="llama2">
+                </div>
+                <div class="form-row">
+                    <label for="local_embedding_model">嵌入模型名称</label>
+                    <input type="text" id="local_embedding_model" name="local_embedding_model" class="form-input" value="{{ config.local_embedding_model or '' }}" placeholder="nomic-embed-text">
+                </div>
+            </div>
+
+            <!-- 测试连接按钮 -->
+            <div class="form-actions" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                <button type="button" id="test-connection-btn" class="btn btn-primary">测试连接</button>
+                <span id="test-result" class="test-result"></span>
+            </div>
+        </fieldset>
+
+        <!-- 系统提示词与检索参数 -->
+        <fieldset class="form-section">
+            <legend>提示词与检索参数</legend>
+            <div class="form-row">
+                <label for="system_prompt">系统提示词</label>
+                <textarea id="system_prompt" name="system_prompt" class="form-textarea" rows="4">{{ config.system_prompt or '' }}</textarea>
+            </div>
+            <div class="form-row form-row-3col">
+                <div class="form-col">
+                    <label for="similarity_threshold">相似度阈值</label>
+                    <input type="number" id="similarity_threshold" name="similarity_threshold" class="form-input" step="0.1" min="0" max="1" value="{{ config.similarity_threshold or 0.5 }}">
+                </div>
+                <div class="form-col">
+                    <label for="top_n">Top N</label>
+                    <input type="number" id="top_n" name="top_n" class="form-input" min="1" max="50" value="{{ config.top_n or 5 }}">
+                </div>
+                <div class="form-col">
+                    <label for="vector_weight">向量相似度权重</label>
+                    <input type="number" id="vector_weight" name="vector_weight" class="form-input" step="0.1" min="0" max="1" value="{{ config.vector_weight or 0.5 }}">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 生成参数 -->
+        <fieldset class="form-section">
+            <legend>生成参数</legend>
+            <div class="form-row form-row-3col">
+                <div class="form-col">
+                    <label for="temperature">温度 (Temperature)</label>
+                    <input type="number" id="temperature" name="temperature" class="form-input" step="0.1" min="0" max="2" value="{{ config.temperature or 0.7 }}">
+                </div>
+                <div class="form-col">
+                    <label for="top_p">Top P</label>
+                    <input type="number" id="top_p" name="top_p" class="form-input" step="0.1" min="0" max="1" value="{{ config.top_p or 0.9 }}">
+                </div>
+                <div class="form-col">
+                    <label for="max_tokens">最大 Token 数</label>
+                    <input type="number" id="max_tokens" name="max_tokens" class="form-input" min="1" max="8192" value="{{ config.max_tokens or 1024 }}">
+                </div>
+            </div>
+            <div class="form-row form-row-3col">
+                <div class="form-col">
+                    <label for="presence_penalty">存在惩罚 (Presence Penalty)</label>
+                    <input type="number" id="presence_penalty" name="presence_penalty" class="form-input" step="0.1" min="-2" max="2" value="{{ config.presence_penalty or 0.0 }}">
+                </div>
+                <div class="form-col">
+                    <label for="frequency_penalty">频率惩罚 (Frequency Penalty)</label>
+                    <input type="number" id="frequency_penalty" name="frequency_penalty" class="form-input" step="0.1" min="-2" max="2" value="{{ config.frequency_penalty or 0.0 }}">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 操作按钮 -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">保存设置</button>
+            <span id="test-result" class="test-result"></span>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/admin_settings.js') }}"></script>
+{% endblock %}

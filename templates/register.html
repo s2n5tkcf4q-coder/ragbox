@@ -1,0 +1,89 @@
+<!-- templates/register.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - RAG 知识库问答系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+</head>
+<body class="light-mode">
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">RAG 知识库问答系统</h1>
+                <p class="login-subtitle">创建新账号</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('auth.register') }}" class="login-form" autocomplete="off">
+                <!-- 用户名 -->
+                <div class="form-group">
+                    <label for="username" class="form-label">用户名</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-input"
+                        placeholder="请输入用户名（至少2个字符）"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <!-- 密码 -->
+                <div class="form-group">
+                    <label for="password" class="form-label">密码</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-input"
+                        placeholder="请输入密码（至少6位）"
+                        required
+                    >
+                </div>
+
+                <!-- 确认密码 -->
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">确认密码</label>
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        class="form-input"
+                        placeholder="请再次输入密码"
+                        required
+                    >
+                    <span id="password-match-hint" class="form-hint"></span>
+                </div>
+
+                <!-- Flash 消息 -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alert-container">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <!-- 注册按钮 -->
+                <button type="submit" class="btn btn-primary btn-login" id="register-btn">
+                    注 册
+                </button>
+
+                <!-- 返回登录 -->
+                <div class="login-footer">
+                    已有账号？
+                    <a href="{{ url_for('auth.login') }}" class="link-register">返回登录</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+</body>
+</html>

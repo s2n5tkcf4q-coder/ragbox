@@ -1,0 +1,74 @@
+<!-- templates/chat.html -->
+{% extends "base.html" %}
+{% block navbar_actions_pre %}
+    {% if current_user.is_admin() %}
+        <a href="{{ url_for('admin.settings') }}" class="btn-plain" style="margin-right: 10px;">⚙️系统管理</a>
+    {% endif %}
+{% endblock %}
+{% block title %}问答 - RAG 知识库问答系统{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="chat-layout">
+    <!-- 左侧历史对话栏 -->
+    <aside class="chat-sidebar" id="chat-sidebar">
+        <div class="sidebar-header">
+            <button id="new-chat-btn" class="btn btn-primary btn-new-chat">⊕ 新对话</button>
+        </div>
+        <ul class="conversation-list" id="conversation-list">
+            {% for conv in conversations %}
+            <li class="conversation-item {% if current_conv and current_conv.id == conv.id %}active{% endif %}" data-id="{{ conv.id }}">
+                <a href="{{ url_for('user.chat', conversation_id=conv.id) }}" class="conv-link">
+                    <span class="conv-title">{{ conv.title or '新对话' }}</span>
+                    <span class="conv-time">{{ conv.updated_at.strftime('%m-%d %H:%M') if conv.updated_at else '' }}</span>
+                </a>
+                <button class="btn-delete-conv" data-id="{{ conv.id }}" title="删除对话">•••</button>
+            </li>
+            {% else %}
+            <li class="no-conversations">暂无对话，开始提问吧</li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <!-- 右侧聊天主区域 -->
+    <section class="chat-main">
+        <div class="chat-messages" id="chat-messages">
+            {% if messages %}
+                {% for msg in messages %}
+                <div class="message message-{{ msg.role }}">
+                    <div class="message-content">
+                        {% if msg.role == 'assistant' and msg.thinking %}
+                        <div class="thinking-block">
+                            <button class="btn-thinking-toggle" onclick="toggleThinking(this)">💭 思考过程</button>
+                            <div class="thinking-text">{{ msg.thinking }}</div>
+                        </div>
+                        {% endif %}
+                        <div class="answer-text markdown-body">
+                            <span class="answer-content">{{ msg.content }}</span>
+                            <button class="btn-copy-message" onclick="copyMessage(this)">📋</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-chat">👋 欢迎使用知识库问答，请输入您的问题</div>
+            {% endif %}
+        </div>
+
+        <!-- 输入区域 -->
+        <div class="chat-input-area">
+            <div class="chat-input-wrapper">
+                <textarea id="user-input" rows="1" placeholder="输入您的问题...Enter发送..."></textarea>
+                <button id="send-btn" class="btn btn-primary">发送</button>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}
