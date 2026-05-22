@@ -46,8 +46,9 @@
 ## 安装与运行
 
 ### 1. 获取项目文件
-将所有代码及文件夹（`templates/`、`static/`、`data/`、`uploads/`、`chroma_db/`、`logs/`）放置在同一目录下。
-
+```bash
+git clone https://github.com/s2n5tkcf4q-coder/ragbox.git
+```
 ### 2. 创建虚拟环境（推荐）
 - 在下载文件夹目录中打开cmd终端，运行以下命令。
 ```bash
