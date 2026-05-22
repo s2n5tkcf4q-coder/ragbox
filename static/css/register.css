@@ -1,0 +1,91 @@
+/* static/css/register.css */
+/* 注册页面样式，与登录页风格保持一致 */
+
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 40px 36px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+.login-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+/* 注册按钮全宽 */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* 底部链接 */
+.login-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.link-register {
+    color: var(--btn-primary-bg);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.link-register:hover {
+    text-decoration: underline;
+}
+
+/* 密码匹配提示 */
+#password-match-hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+#password-match-hint.match-success {
+    color: var(--alert-success-text);
+}
+
+#password-match-hint.match-error {
+    color: var(--alert-danger-text);
+}
+
+/* 响应式 */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 30px 20px;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,388 @@
+/* static/css/chat.css */
+/* 聊天问答页面样式，参考 DeepSeek 风格 */
+
+/* ===== 整体聊天布局 ===== */
+.chat-layout {
+    display: flex;
+    height: calc(100vh - 60px); /* 减去顶部导航高度 */
+    overflow: hidden;
+}
+
+/* ===== 左侧历史对话侧边栏 ===== */
+.chat-sidebar {
+    width: 280px;
+    min-width: 280px;
+    background-color: var(--card-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.btn-new-chat {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.95rem;
+    border-radius: var(--radius);
+}
+
+.conversation-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    list-style: none;
+    margin: 0;
+}
+
+.conversation-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.conversation-item:hover {
+    background-color: var(--btn-secondary-bg);
+}
+
+.conversation-item.active {
+    background-color: rgba(64, 158, 255, 0.12);
+    border-left: 3px solid var(--btn-primary-bg);
+}
+
+.conv-link {
+    flex: 1;
+    text-decoration: none;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.conv-title {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conv-time {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.btn-delete-conv {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 4px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    transition: color 0.2s, background 0.2s;
+}
+
+.btn-delete-conv:hover {
+    color: var(--btn-danger-text);
+    background: var(--btn-secondary-bg);
+}
+
+.no-conversations {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px 16px;
+    font-size: 0.9rem;
+}
+
+/* ===== 右侧主聊天区域 ===== */
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    overflow: hidden;
+}
+
+/* 消息滚动区 */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    scroll-behavior: smooth;
+}
+
+/* 单条消息 */
+.message {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+    max-width: 80%;
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.message-user {
+    align-items: flex-end;
+    margin-left: auto;
+}
+
+.message-user .message-content {
+    background-color: var(--btn-primary-bg);
+    color: #fff;
+    border-radius: 12px 12px 0 12px;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.message-assistant {
+    align-items: flex-start;
+    margin-right: auto;
+}
+
+.message-assistant .message-content {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px 12px 12px 0;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.message-assistant .answer-text {
+    position: relative;
+    padding-right: 36px;   /* 留出按钮空间 */
+    min-height: 1.6em;    /* 防止空内容时按钮错位 */
+    display: block !important;
+}
+
+/* 思维链块 */
+.thinking-block {
+    margin-bottom: 12px;
+}
+
+.btn-thinking-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background-color: var(--bg-color);
+    transition: all 0.2s;
+    margin-bottom: 8px;
+}
+
+.btn-thinking-toggle:hover {
+    background-color: var(--btn-secondary-bg);
+    color: var(--text-color);
+}
+
+.thinking-text {
+    background-color: var(--bg-color);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--btn-primary-bg);
+    margin-top: 6px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    display: block;
+}
+
+/* 复制按钮 */
+.btn-copy-message {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background-color: var(--card-bg);
+    transition: all 0.2s;
+    z-index: 2;
+    line-height: 1;
+}
+
+.btn-copy-message:hover {
+    background-color: var(--btn-secondary-bg);
+    color: var(--text-color);
+}
+
+/* 空状态提示 */
+.empty-chat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* ===== 底部输入区域 ===== */
+.chat-input-area {
+    border-top: 1px solid var(--border-color);
+    padding: 12px 20px;
+    background-color: var(--card-bg);
+}
+
+.chat-input-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+#user-input {
+    flex: 1;
+    resize: none;
+    padding: 10px 14px;
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+    line-height: 1.5;
+    max-height: 150px;
+}
+
+#user-input:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 2px rgba(64,158,255,0.2);
+}
+
+#send-btn {
+    padding: 10px 24px;
+    height: 44px;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+/* 流式消息中的光标动画 */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.streaming-cursor::after {
+    content: '|';
+    animation: blink 1s infinite;
+    font-weight: bold;
+    color: var(--btn-primary-bg);
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 768px) {
+    .chat-layout {
+        flex-direction: column;
+    }
+
+    .chat-sidebar {
+        width: 100%;
+        min-width: 100%;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .conversation-item {
+        padding: 6px 8px;
+    }
+
+    .chat-messages {
+        padding: 16px 12px;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    .chat-input-wrapper {
+        gap: 8px;
+    }
+
+    #send-btn {
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .message {
+        max-width: 95%;
+    }
+
+    .sidebar-header {
+        padding: 10px;
+    }
+
+    .chat-input-area {
+        padding: 8px 10px;
+    }
+
+    #user-input {
+        font-size: 0.9rem;
+    }
+}
+
+.chat-input-area .btn-copy-message,
+body > .btn-copy-message,
+.message-user .btn-copy-message {
+    display: none !important;
+}
+
+/* 思考中指示器 */
+.thinking-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+}
+
+/* 闪烁的小圆点 */
+.dot-pulse {
+    width: 8px;
+    height: 8px;
+    background-color: var(--btn-primary-bg);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50%      { opacity: 1; transform: scale(1.2); }
+}
+
+/* 强制历史答案区域可见（防止动态残留隐藏） */
+.message-assistant .answer-text {
+    display: block !important;
+}

@@ -1,0 +1,55 @@
+/* static/css/admin_users.css */
+/* 用户管理页面专属样式 */
+
+/* 用户表格容器 */
+.users-table {
+    /* 继承 common.css 的表格样式，这里仅微调 */
+    min-width: 700px;
+}
+
+/* 角色选择下拉框 */
+.role-select {
+    padding: 4px 8px;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.role-select:focus {
+    border-color: var(--input-focus-border);
+}
+
+/* 内联表单间距 */
+.action-cell .inline-form {
+    margin-right: 6px;
+}
+
+/* 当前用户文字提示 */
+.text-muted {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* 响应式：在手机端表格横向滚动 */
+@media (max-width: 768px) {
+    .users-table {
+        min-width: 100%;
+        font-size: 0.85rem;
+    }
+
+    .role-select {
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    .action-cell {
+        flex-direction: column;
+        gap: 6px;
+    }
+}
