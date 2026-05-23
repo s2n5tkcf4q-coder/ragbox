@@ -7,7 +7,7 @@ import os
 
 class Config:
     # --- 安全密钥 ---
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess-this-secret-key'
+    SECRET_KEY = 'a-very-strong-random-string-123456'
 
     # --- 数据库 ---
     # SQLite 数据库文件存放于 data/app.db
@@ -46,6 +46,10 @@ class Config:
         "如果上下文不足以回答问题，请明确告知用户。"
     )
 
+    # 文本分块参数
+    DEFAULT_CHUNK_SIZE = 500  # 文本块最大字符数
+    DEFAULT_CHUNK_OVERLAP = 50  # 相邻块重叠字符数
+
     # 检索参数默认值
     DEFAULT_SIMILARITY_THRESHOLD = 0.5   # 相似度阈值
     DEFAULT_TOP_N = 5                    # 检索返回的块数
@@ -56,7 +60,7 @@ class Config:
     DEFAULT_TOP_P = 0.9
     DEFAULT_PRESENCE_PENALTY = 0.0
     DEFAULT_FREQUENCY_PENALTY = 0.0
-    DEFAULT_MAX_TOKENS = 1024
+    DEFAULT_MAX_TOKENS = 2048
 
     # --- 文件上传限制 ---
     MAX_CONTENT_LENGTH = 32 * 1024 * 1024  # 最大上传 32MB
