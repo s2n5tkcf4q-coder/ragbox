@@ -26,7 +26,7 @@
 ## 安装与运行
 
 ### 1. 获取项目文件
-- 点击code直接下载zip文件
+- 点击code直接下载zip文件。
 - 或使用git安装。
 ```bash
 git clone https://github.com/s2n5tkcf4q-coder/ragbox.git
