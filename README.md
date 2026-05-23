@@ -65,8 +65,7 @@ app.run(host='0.0.0.0', port=**8080**, debug=False)
 - 管理员登陆后自动跳转到系统配置页面。
 ![系统设置](/static/img/settings.png)
 - 系统需要两个模型，一个为对话模型，一个为嵌入模型。嵌入模型用于文档处理为知识库，对话模型用于基于知识库的问答。
-- **ollama**URL固定为 http://127.0.0.1:11434。
-- **API**模式URL需在服务商处获取，例如：硅基流动API URL为 https://api.siliconflow.cn/v1
+- **ollama**URL固定为 http://127.0.0.1:11434。**API**模式URL需在服务商处获取，例如：硅基流动API URL为 https://api.siliconflow.cn/v1
 - **ollama**模式可根据部署电脑性能选择模型，对话模型尽量不要选用小参数模型，小模型上下文不足会导致无法运行。ps:测试时使用的都是通义千问的模型，对话模型为qwen3.5:9b，嵌入模型为qwen3-embedding:8b。
 - **API**模式可在服务商模型广场搜索，模型名中有Embedding的为嵌入模型。
 - 选定模型后将模型名称填入相应文本框，**API**模式需提供的API Key可在服务商处获得。
