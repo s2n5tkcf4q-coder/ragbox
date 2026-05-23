@@ -114,7 +114,7 @@
                 </div>
                 <div class="form-col">
                     <label for="max_tokens">最大 Token 数</label>
-                    <input type="number" id="max_tokens" name="max_tokens" class="form-input" min="1" max="8192" value="{{ config.max_tokens or 1024 }}">
+                    <input type="number" id="max_tokens" name="max_tokens" class="form-input" step="1024" min="1204" max="8192" value="{{ config.max_tokens or 1024 }}">
                 </div>
             </div>
             <div class="form-row form-row-3col">

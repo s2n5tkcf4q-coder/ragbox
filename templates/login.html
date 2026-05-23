@@ -1,3 +1,4 @@
+
 <!-- templates/login.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -47,26 +48,13 @@
                 </div>
 
                 <!-- 验证码 -->
-                <div class="form-group">
-                    <label for="captcha" class="form-label">验证码</label>
-                    <div class="captcha-row">
-                        <input
-                            type="text"
-                            id="captcha"
-                            name="captcha"
-                            class="form-input captcha-input"
-                            placeholder="请输入验证码"
-                            maxlength="4"
-                            required
-                        >
-                        <img
-                            src="{{ url_for('auth.captcha') }}"
-                            alt="验证码"
-                            class="captcha-img"
-                            id="captcha-img"
-                            title="点击刷新验证码"
-                        >
-                    </div>
+                <div class="captcha-row">
+                    <input type="text" id="captcha" name="captcha" class="form-input captcha-input"
+                           placeholder="请输入验证码" maxlength="4" required autocomplete="off">
+                    {% if captcha_img_data %}
+                        <img src="data:image/png;base64,{{ captcha_img_data }}" alt="验证码" class="captcha-img" id="captcha-img" title="点击刷新验证码">
+                    {% endif %}
+                    <input type="hidden" name="captcha_token" value="{{  captcha_token }}">
                 </div>
 
                 <!-- 错误提示区（由 Flask flash 消息渲染） -->
