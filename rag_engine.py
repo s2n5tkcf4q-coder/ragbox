@@ -70,7 +70,8 @@ def _get_embedding_function():
 
 # -------------------- 文档分块工具 --------------------
 
-def _split_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]:
+def _split_text(text: str, chunk_size: int = Config.DEFAULT_CHUNK_SIZE,
+                overlap: int = Config.DEFAULT_CHUNK_OVERLAP) -> List[str]:
     """
     递归字符分割器：按段落、句子、字符逐步切分，保证块大小大致为 chunk_size。
     """
@@ -317,7 +318,13 @@ def generate_answer(
     # 构建消息列表
     messages = [{"role": "system", "content": system_prompt}]
     if conversation_history:
-        messages.extend(conversation_history)
+        # 过滤掉历史中的 system 消息，只保留 user 和 assistant
+        filtered_history = [
+            msg for msg in conversation_history
+            if msg.get('role') in ('user', 'assistant')
+        ]
+        # 只保留最近 10 轮对话，避免上下文过长
+        messages.extend(filtered_history[-10:])
 
     # 用户消息：包含上下文和问题
     user_content = f"请根据以下知识库内容回答问题。\n知识库内容：\n{context}\n\n问题：{query}\n\n请先逐步思考，再给出最终答案。使用【思考】和【回答】标记分开。"
@@ -331,7 +338,8 @@ def generate_answer(
         top_p=top_p,
         max_tokens=max_tokens,
         presence_penalty=presence_penalty,
-        frequency_penalty=frequency_penalty
+        frequency_penalty=frequency_penalty,
+        stop=["<|endoftext|>", "<|im_start|>"]
     )
 
 
