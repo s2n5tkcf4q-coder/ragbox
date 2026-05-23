@@ -48,6 +48,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 ### 4. 启动应用
+- windows需使用PowerShell
 ```bash
 python app.py
 ```
