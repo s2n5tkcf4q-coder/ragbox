@@ -10,7 +10,7 @@
     function refreshCaptcha() {
         if (captchaImg) {
             // 添加随机参数避免浏览器缓存
-            captchaImg.src = '/auth/captcha?' + new Date().getTime();
+            location.reload();
         }
     }
 

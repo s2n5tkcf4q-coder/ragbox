@@ -235,7 +235,7 @@
                                         thinkingReceived = true;
                                     }
                                 }
-                            } else if (data.type === 'answer') {
+                                                        } else if (data.type === 'answer') {
                                 // 动态创建答案区
                                 let answerDiv = assistantMsgDiv.querySelector('.answer-text');
                                 let answerSpan = answerDiv?.querySelector('.answer-content');
@@ -249,6 +249,19 @@
                                     answerSpan = document.createElement('span');
                                     answerSpan.className = 'answer-content';
                                     answerDiv.appendChild(answerSpan);
+
+                                    // 创建复制按钮
+                                    const copyBtn = document.createElement('button');
+                                    copyBtn.className = 'btn-copy-message';
+                                    copyBtn.textContent = '📋';
+                                    copyBtn.addEventListener('click', function(e) {
+                                        e.stopPropagation();
+                                        const raw = answerDiv.dataset.rawMarkdown || answerSpan.textContent;
+                                        const thinkingContent = assistantMsgDiv.querySelector('.thinking-text')?.textContent || '';
+                                        const full = thinkingContent ? thinkingContent + '\n\n' + raw : raw;
+                                        copyMessageToClipboard(full);
+                                    });
+                                    answerDiv.appendChild(copyBtn);
 
                                     assistantMsgDiv.querySelector('.message-content').appendChild(answerDiv);
                                 }
