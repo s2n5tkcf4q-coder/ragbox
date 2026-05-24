@@ -130,3 +130,83 @@ def login():
     return render_template('login.html',
                            captcha_img_data=captcha_img_data,
                            captcha_token=new_token)
+    
+# ---------- 注册 ----------
+@auth_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    """注册页面（仅限普通用户）"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '')
+        confirm_password = request.form.get('confirm_password', '')
+
+        if password != confirm_password:
+            flash('两次输入的密码不一致', 'danger')
+            return render_template('register.html')
+
+        if len(username) < 2 or len(password) < 6:
+            flash('用户名至少2个字符，密码至少6位', 'danger')
+            return render_template('register.html')
+
+        existing = db_session.query(User).filter_by(username=username).first()
+        if existing:
+            flash('用户名已被注册', 'danger')
+            return render_template('register.html')
+
+        hashed_pw = generate_password_hash(password)
+        new_user = User(username=username, password_hash=hashed_pw, role='user')
+        db_session.add(new_user)
+        db_session.commit()
+
+        log_activity(new_user.id, 'register', f'新用户注册: {username}')
+        db_session.commit()
+
+        flash('注册成功，请登录', 'success')
+        return redirect(url_for('auth.login'))
+
+    return render_template('register.html')
+
+
+# ---------- 登出 ----------
+@auth_bp.route('/logout')
+@login_required
+def logout():
+    """登出"""
+    user = current_user
+    log_activity(user.id, 'logout', f'用户 {user.username} 登出')
+    db_session.commit()
+    logout_user()
+    return redirect(url_for('auth.login'))
+
+
+# ---------- 修改密码 ----------
+@auth_bp.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_pw = request.form.get('current_password', '')
+        new_pw = request.form.get('new_password', '')
+        confirm_pw = request.form.get('confirm_password', '')
+
+        if not check_password_hash(current_user.password_hash, current_pw):
+            flash('当前密码错误', 'danger')
+            return render_template('change_password.html')
+
+        if not new_pw or len(new_pw) < 6:
+            flash('新密码至少需要6位', 'danger')
+            return render_template('change_password.html')
+
+        if new_pw != confirm_pw:
+            flash('两次新密码输入不一致', 'danger')
+            return render_template('change_password.html')
+
+        current_user.password_hash = generate_password_hash(new_pw)
+        db_session.commit()
+        log_activity(current_user.id, 'change_password', '用户修改了密码')
+        flash('密码修改成功，请重新登录', 'success')
+        return redirect(url_for('auth.login'))
+
+    return render_template('change_password.html')
