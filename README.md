@@ -86,7 +86,7 @@ cd d:\ragbox-main
 .\venv\Scripts\Activate.ps1
 # 启动主程序
 python app.py
-# 如果系统禁止脚本运行时需要操作输入一下命令：
+# 如果系统禁止脚本运行时需要操作输入以下命令：
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 # 输入y
 ```
