@@ -93,7 +93,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 #### 3. ollama操作
 ```bash
-# 下载ollama并确认其在后台运行。
+# 下载安装ollama并确认其在后台运行。
 # 运行cmd
 # 下载9b的qwen3.5模型
 ollama pull qwen3.5:9b
