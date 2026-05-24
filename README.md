@@ -63,8 +63,8 @@ app.run(host='0.0.0.0', port=8080, debug=False)
 - 修改端口注意避开系统默认端口比如：0-1023，1433，3306，5432等。
 
 ### 5. windows系统完整部署步骤
-以下载在d:\ragbox-main为例。
-到python官网下载python，版本3.9到3.12推荐使用3.11。
+- 以下载在d:\ragbox-main为例。
+- 到python官网下载python，版本3.9到3.12推荐使用3.11。
 #### 1. 以管理员身份运行cmd
 ```bash
 cd d:\ragbox-main
