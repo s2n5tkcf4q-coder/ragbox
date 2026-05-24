@@ -62,14 +62,56 @@ app.run(host='0.0.0.0', port=8080, debug=False)
 ```
 - 修改端口注意避开系统默认端口比如：0-1023，1433，3306，5432等。
 
-### 5. 登陆系统
+### 5. windows系统完整部署步骤
+以下载在d:\ragbox-main为例。
+
+#### 1. 以管理员身份运行cmd
+```bash
+cd d:\ragbox-main
+# 创建虚环境
+python -m venv venv
+# 如果系统有多个python版本，这里需要指定版本
+# python3.11 -m venv venv
+venv\Scripts\activate
+# 安装依赖py包
+pip install -r requirements.txt
+# 下载失败或速度慢可以尝试使用国内镜像，以下为阿里云镜像。
+# pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+```
+
+#### 2. 以管理员身份运行Windows PowerShell
+```bash
+cd d:\ragbox-main
+# 激活虚拟环境
+.\venv\Scripts\Activate.ps1
+# 启动主程序
+python app.py
+# 如果系统禁止脚本运行时需要操作输入一下命令：
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# 输入y
+```
+
+#### 3. ollama操作
+```bash
+# 下载ollama并确认其在后台运行。
+# 运行cmd
+# 下载9b的qwen3.5模型
+ollama pull qwen3.5:9b
+# 下载8b的qwen3-embedding模型
+ollama pull qwen3-embedding:8b
+# 本地模型下载选择可在ollama官网搜索选择，能够下载的仅为开源模型。
+# 查看已下载的模型
+ollama list
+```
+
+### 6. 登陆系统
 - 系统首次启动时初始化管理员用户密码分别为**admin / admin123**。
 
 ![登陆界面](/static/img/login.png)
 
 - 登陆界面可自行注册，注册的账户没有管理员的功能，注册登陆后直接跳转问答界面。
 
-### 6. 系统配置
+### 7. 系统配置
 - 管理员登陆后自动跳转到系统配置页面。
 
 ![系统设置](/static/img/settings.png)
@@ -95,7 +137,7 @@ app.run(host='0.0.0.0', port=8080, debug=False)
 ```
 - 设置好后点击保存设置，系统会自动测试两个模型连接是否成功并返回结果。
 
-### 7. 文档处理
+### 8. 文档处理
 - 设置完成并确定模型连接成功后，即可点击处理文件上传文件构建知识库。
 - 点击浏览文件(目前仅支持docx文件)上传文件后点击开始处理。处理完成后系统会返回处理结果。
 
@@ -107,13 +149,13 @@ app.run(host='0.0.0.0', port=8080, debug=False)
 
 - 上传文档理论上没有上限，可以通过对话从大量文档中快速检索。
 
-### 8. 问答系统
+### 9. 问答系统
 - 文档处理完成后即可使用问答系统。如果未上传文档或模型连接失败则直接返回提示。
 - **ollama**模式回答的速度取决于选择的会话模型和电脑配置。**API**模式速度取决于服务商。
 
 ![问答系统](/static/img/chat.png)
 
-### 9. 注意事项
+### 10. 注意事项
 - logs文件夹下为系统运行日志，频繁使用需定期清理。
 - 文件构架清晰，各模块文档均为独立，方便用户进行二次开发。
 - 删除文件时，只是删除保存在uploads内的文件和嵌入式数据库存储向量和索引；并不能删除已经上传并处理的文件分块内容；因此chroma_db文件夹会越来越大，如果要删除很多处理过的文件，建议重建知识库；即删除所有上传文件然后手动删除chroma_db文件夹下所有文件；然后再上传需要的文件。
