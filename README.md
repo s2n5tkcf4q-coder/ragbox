@@ -70,10 +70,10 @@ app.run(host='0.0.0.0', port=8080, debug=False)
 cd d:\ragbox-main
 # 创建虚环境
 python -m venv venv
-# 如果系统有多个python版本，这里需要指定版本
+# 如果系统有多个python版本，这里需要指定python版本为3.11，如下：
 # python3.11 -m venv venv
 venv\Scripts\activate
-# 安装依赖py包
+# 安装程序所需的依赖python包。
 pip install -r requirements.txt
 # 下载失败或速度慢可以尝试使用国内镜像，以下为阿里云镜像。
 # pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
@@ -86,9 +86,9 @@ cd d:\ragbox-main
 .\venv\Scripts\Activate.ps1
 # 启动主程序
 python app.py
-# 如果系统禁止脚本运行时需要操作输入以下命令：
+# 如果启动时系统提示禁止脚本运行，需要操作输入以下命令：
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-# 输入y
+# 输入y，然后再启动：python app.py
 ```
 
 #### 3. ollama操作
@@ -99,8 +99,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ollama pull qwen3.5:9b
 # 下载8b的qwen3-embedding模型
 ollama pull qwen3-embedding:8b
-# 本地模型下载选择可在ollama官网搜索选择，能够下载的仅为开源模型。
-# 查看已下载的模型
+# 本地模型下载选择可在ollama官网搜索选择，能够下载的仅为开源的LLM。
+# 查看已下载的模型。
 ollama list
 ```
 
