@@ -34,7 +34,7 @@ git clone https://github.com/s2n5tkcf4q-coder/ragbox.git
 ### 2. 创建虚拟环境（推荐）
 - 打开cmd/终端，运行以下命令。 
 ```bash
-cd 实际路径/ragbox-main    #git安装文件夹名为ragbox
+cd 实际路径/ragbox-main    #或ragbox
 python -m venv venv
 
 # Windows
